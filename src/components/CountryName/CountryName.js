@@ -3,7 +3,7 @@ import './CountryName.css';
 
 const CountryName = (props) => {
   return (
-    <p className="CountryName">
+    <p className="CountryName" onClick={props.clicked}>
       {props.country}
     </p>
   );
