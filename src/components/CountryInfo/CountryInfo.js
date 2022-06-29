@@ -4,11 +4,13 @@ import {ALPHA_CODE_URL, COUNTRY_INFO_URL} from "../../config";
 
 const CountryInfo = ({countryName}) => {
   const [countryInfo, setCountryInfo] = useState(null);
+  const [countryLoading, setCountryLoading] = useState(false);
 
   useEffect(() => {
     const fetchCountryInfo = async () => {
       if(countryName !== null) {
         try {
+          setCountryLoading(true);
           const response = await axios(COUNTRY_INFO_URL + countryName);
           const countryFullData = response.data[0];
 
@@ -35,7 +37,7 @@ const CountryInfo = ({countryName}) => {
           };
 
           setCountryInfo(country);
-
+          setCountryLoading(false);
         } catch (e) {
           console.error(e);
         }
@@ -48,14 +50,43 @@ const CountryInfo = ({countryName}) => {
 
   return countryInfo && (
     <div>
-      <div className="row justify-content-between">
-        <div>
-          <h1>{}</h1>
-          <p><strong>Capital: </strong>{}</p>
-          <p><strong>Population: </strong>{}</p>
-          <p><strong>Continents: </strong>{}</p>
+      {countryLoading ?
+        <div className="spinner-border text-secondary" role="status">
+          <span className="sr-only">Loading...</span>
+        </div> :
+        <div className="row justify-content-around align-items-start">
+          <div className="col-8">
+            <h1 className="mb-4">{countryInfo.name}</h1>
+            <p><strong>Capital: </strong>{countryInfo.capital}</p>
+            <p><strong>Population: </strong>{countryInfo.population}</p>
+            <p><strong>Region: </strong>{countryInfo.region}</p>
+            <p>
+              <strong>Languages: </strong>
+              {countryInfo.languages.map(language => (
+                <span
+                  key={language}
+                  className="p-1 mr-2 border"
+                >
+                {language}
+              </span>
+              ))}
+            </p>
+            <h4 className="mt-5">Borders with:</h4>
+            {
+              countryInfo.borders.length !== 0 ?
+                (<ul>
+                  {countryInfo.borders.map(border => (
+                    <li key={border}>{border}</li>
+                  ))}
+                </ul>) :
+                (<p>No border countries</p>)
+            }
+          </div>
+          <div className="col-3">
+            <img src={countryInfo.flag} alt={countryInfo.name} style={{maxWidth: '100%'}}/>
+          </div>
         </div>
-      </div>
+      }
     </div>
   );
 };
