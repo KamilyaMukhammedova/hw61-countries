@@ -4,7 +4,7 @@ import './CountryName.css';
 const CountryName = (props) => {
   return (
     <p className="CountryName">
-      {props.name}
+      {props.country}
     </p>
   );
 };

@@ -1,3 +1,8 @@
 .CountryName {
+    text-decoration: underline;
+    padding: 5px 0;
+}
+
+.CountryName:active {
     background-color: rgba(252, 227, 148, 0.4);
 }
